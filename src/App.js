@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Stopwatch from './Stopwatch';
+import Button from './Button';
 
 class App extends Component {
   constructor(props) {
@@ -11,34 +12,45 @@ class App extends Component {
       status: false,
     };
     this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
     this.handleReset = this.handleReset.bind(this);
   }
+
   handleStart() {
-    this.setState(state => {
-      if (state.status) {
-        clearInterval(this.timer);
-      } else {
-        const startTime = Date.now() - this.state.runningTime;
-        this.timer = setInterval(() => {
-          this.setState({ runningTime: Date.now() - startTime });
-        });
-      }
-      return { status: !state.status };
-    });
+    if (!this.state.status) {
+      this.setState({
+        status: true,
+      });
+      const startTime = Date.now() - this.state.runningTime;
+      this.timer = setInterval(() => {
+        this.setState({ runningTime: Date.now() - startTime });
+      });
+    }
   }
-  handleReset() {
+
+  handleStop() {
+    this.setState({ status: false });
     clearInterval(this.timer);
-    this.setState({ runningTime: 0, status: false });
   }
+
+  handleReset() {
+    this.setState({ runningTime: 0, status: false });
+    clearInterval(this.timer);
+  }
+
   componentWillUnmount() {
     clearInterval(this.timer);
   }
+
   render() {
     const { status, runningTime } = this.state;
     return (
       <div className="App">
         <h1>Stopwatch</h1>
         <Stopwatch time={runningTime} status={status} start={() => this.handleStart} reset={() => this.handleReset} />
+        <Button text="Start" handleClick={() => this.handleStart} />
+        <Button text="Stop" handleClick={() => this.handleStop} />
+        <Button text="Reset" handleClick={() => this.handleReset} />
       </div>
     )
   }
