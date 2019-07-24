@@ -5,6 +5,7 @@ class Stopwatch extends Component {
     const { time, status } = this.props;
     return (
       <div>
+        <span>{status.toString()}</span>
         <p>{time}ms</p>
       </div>
     );

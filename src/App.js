@@ -3,6 +3,7 @@ import './App.css';
 
 import Stopwatch from './Stopwatch';
 import Button from './Button';
+import Historic from './Historic';
 
 class App extends Component {
   constructor(props) {
@@ -10,10 +11,12 @@ class App extends Component {
     this.state = {
       runningTime: 0,
       status: false,
+      trail: 0,
     };
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleMark = this.handleMark.bind(this);
   }
 
   handleStart() {
@@ -24,7 +27,7 @@ class App extends Component {
       const startTime = Date.now() - this.state.runningTime;
       this.timer = setInterval(() => {
         this.setState({ runningTime: Date.now() - startTime });
-      });
+      }, 100);
     }
   }
 
@@ -32,6 +35,10 @@ class App extends Component {
     this.setState({ status: false });
     clearInterval(this.timer);
   }
+
+  handleMark() {
+    this.setState({ trail: this.state.runningTime });
+  }  
 
   handleReset() {
     this.setState({ runningTime: 0, status: false });
@@ -43,14 +50,18 @@ class App extends Component {
   }
 
   render() {
-    const { status, runningTime } = this.state;
+    const { status, runningTime, trail } = this.state;
     return (
       <div className="App">
-        <h1>Stopwatch</h1>
-        <Stopwatch time={runningTime} status={status} start={() => this.handleStart} reset={() => this.handleReset} />
+        <h1>Cronômetro</h1>
+        <Stopwatch time={runningTime} status={status} reset={() => this.handleReset} />
         <Button text="Start" handleClick={() => this.handleStart} />
         <Button text="Stop" handleClick={() => this.handleStop} />
         <Button text="Reset" handleClick={() => this.handleReset} />
+        <br></br>
+        <Button text="Mark" handleClick={() => this.handleMark} />
+        <hr></hr>
+        <Historic time={trail}></Historic>
       </div>
     )
   }
