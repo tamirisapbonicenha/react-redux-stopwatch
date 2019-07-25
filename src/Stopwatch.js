@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 class Stopwatch extends Component {
   render() {
     const { time, status } = this.props;
     return (
-      <div>
-        <span>{status.toString()}</span>
+      <Fragment>
         <p>{time}ms</p>
-      </div>
+      </Fragment>
     );
   }
 }
