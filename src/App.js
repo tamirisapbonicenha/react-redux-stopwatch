@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       runningTime: 0,
       status: false,
-      trail: 0,
+      trail: [],
     };
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
@@ -37,11 +37,17 @@ class App extends Component {
   }
 
   handleMark() {
-    this.setState({ trail: this.state.runningTime });
+    if (this.state.runningTime) {
+      this.setState({ trail: [].concat(this.state.trail, this.state.runningTime) }) 
+    }
   }  
 
   handleReset() {
-    this.setState({ runningTime: 0, status: false });
+    this.setState({ 
+      runningTime: 0, 
+      status: false,
+      trail: [],
+    });
     clearInterval(this.timer);
   }
 

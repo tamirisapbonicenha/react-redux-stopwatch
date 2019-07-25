@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 const Historic = props => {
     return (
-        // <button onClick={props.handleClick()}>{props.text}</button>
-        <div>
+        <Fragment>
             <h4>Histórico</h4>
-            <h5>{props.time}</h5>
-        </div>
+            <ul>
+                { props.time.map((time, index) => <li key={index}>{ time }</li>) }
+            </ul>            
+        </Fragment>
     )
 }
 
-export default Historic
+export default Historic;
