@@ -1,62 +1,50 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 
 import Stopwatch from './Stopwatch';
 import Button from './Button';
 import Historic from './Historic';
 
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      runningTime: 0,
-      status: false,
-      trail: [],
-    };
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
-    this.handleReset = this.handleReset.bind(this);
     this.handleMark = this.handleMark.bind(this);
-    this.handleModal = this.handleModal.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
+  componentDidMount() {
+    this.interval = setInterval(this.forceUpdate.bind(this), 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }  
+
   handleStart() {
-    if (!this.state.status) {
-      this.setState({
-        status: true,
-      });
-      const startTime = Date.now() - this.state.runningTime;
+    if (!this.props.isRunning) {
       this.timer = setInterval(() => {
-        this.setState({ runningTime: Date.now() - startTime });
+        this.props.dispatch({ type: 'START_TIMER' });
       }, 100);
     }
   }
 
   handleStop() {
-    this.setState({ status: false });
+    this.props.dispatch({ type: 'STOP_TIMER' });
     clearInterval(this.timer);
   }
 
   handleMark() {
-    if (this.state.runningTime) {
-      this.setState({ trail: [].concat(this.state.trail, this.state.runningTime) }) 
+    if (this.props.runningTime) {
+      this.props.dispatch({ type: 'MARK_TIMER' })
     }
   }  
 
   handleReset() {
-    this.setState({ 
-      runningTime: 0, 
-      status: false,
-      trail: [],
-    });
+    this.props.dispatch({ type: 'RESET_TIMER' });
     clearInterval(this.timer);
-  }
-
-  handleModal() {
-    if (this.state.runningTime) {
-      this.setState({ trail: [].concat(this.state.trail, this.state.runningTime) }) 
-    }
   }   
 
   componentWillUnmount() {
@@ -64,26 +52,34 @@ class App extends Component {
   }
 
   render() {
-    const { status, runningTime, trail } = this.state;
     return (
       <div className="App">
-        <button className="btn-about" handleClick={() => this.handleModal}>About</button>
         <div className="container">
-          <h1>Cronômetro</h1>
-          <Stopwatch time={runningTime} status={status} reset={() => this.handleReset} />
+          <h1>Stopwatch</h1>
+          <Stopwatch time={this.props.runningTime} />
           <div className="actions-buttons">
             <Button text="Start" handleClick={() => this.handleStart} />
             <Button text="Stop" handleClick={() => this.handleStop} />
-            <Button text="Reset" handleClick={() => this.handleReset} />
             <Button text="Mark" handleClick={() => this.handleMark} />
+            <Button text="Reset" handleClick={() => this.handleReset} />
           </div>
           <hr></hr>
-          <Historic time={trail}></Historic>
+          <Historic time={this.props.trails}></Historic>
         </div> 
-        <h6>stopwatch made with react <span>&#10084;</span></h6> 
+        <h6>stopwatch made with react/redux<span> &#10084;</span>
+          <br />
+          developer by 
+          <a href="https://github.com/tamirisapbonicenha" target="_blank">tamirisapbonicenha</a>
+        </h6> 
       </div>
     )
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  runningTime: state.timer.runningTime,
+  isRunning: state.timer.isRunning,
+  trails: state.timer.trails
+});
+
+export default connect(mapStateToProps)(App);
