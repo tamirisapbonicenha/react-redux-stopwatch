@@ -3,6 +3,6 @@ import { timer } from './timer';
 import { combineReducers } from 'redux';
 
 export const Reducers = combineReducers({
-	timer: timer,
+	timer
 	//   otherState: otherReducer
 });

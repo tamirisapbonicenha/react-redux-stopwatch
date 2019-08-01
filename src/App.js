@@ -15,14 +15,6 @@ class App extends Component {
     this.handleReset = this.handleReset.bind(this);
   }
 
-  componentDidMount() {
-    this.interval = setInterval(this.forceUpdate.bind(this), 100);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }  
-
   handleStart() {
     if (!this.props.isRunning) {
       this.timer = setInterval(() => {
@@ -40,12 +32,12 @@ class App extends Component {
     if (this.props.runningTime) {
       this.props.dispatch({ type: 'MARK_TIMER' })
     }
-  }  
+  }
 
   handleReset() {
     this.props.dispatch({ type: 'RESET_TIMER' });
     clearInterval(this.timer);
-  }   
+  }
 
   componentWillUnmount() {
     clearInterval(this.timer);
@@ -65,12 +57,12 @@ class App extends Component {
           </div>
           <hr></hr>
           <Historic time={this.props.trails}></Historic>
-        </div> 
+        </div>
         <h6>stopwatch made with react/redux<span> &#10084;</span>
           <br />
-          developer by 
+          developer by
           <a href="https://github.com/tamirisapbonicenha" target="_blank">tamirisapbonicenha</a>
-        </h6> 
+        </h6>
       </div>
     )
   }

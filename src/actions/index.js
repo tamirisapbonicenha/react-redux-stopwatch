@@ -2,3 +2,6 @@ const START_TIMER = "START_TIMER";
 const STOP = "STOP_TIMER";
 const RESET = "RESET_TIMER";
 const MARK = "MARK_TIMER";
+
+
+

@@ -16,19 +16,19 @@ export const timer = (state = initialState, action) => {
       return {
         ...state,
         isRunning: false,
-      }   
+      }
     case 'MARK_TIMER':
       return {
         ...state,
         trails: state.trails.concat([state.runningTime]),
-      }      
+      }
     case 'RESET_TIMER':
       return {
         ...state,
         runningTime: 0,
         isRunning: false,
         trails: [],
-      }       
+      }
     default:
       return state;
   }
